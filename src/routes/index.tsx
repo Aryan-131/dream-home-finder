@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useFavorites } from "@/lib/favorites";
 import { PropertyCard } from "@/components/PropertyCard";
+import hero from "@/assets/hero.jpg";
+import { ArrowRight, Compass, KeyRound, ShieldCheck, Heart } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const field = "w-full rounded-md border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary";
+const field = "w-full rounded-full border border-input bg-background/60 px-4 py-2.5 text-sm outline-none focus:border-primary";
 
 function Index() {
   const { user } = useAuth();
@@ -53,20 +55,38 @@ function Index() {
   );
 
   return (
-    <main className="mx-auto max-w-7xl px-6">
-      <section className="grid gap-10 py-16 md:grid-cols-[1.2fr_1fr] md:items-end">
-        <div>
-          <p className="eyebrow">Homes worth coming back to</p>
-          <h1 className="mt-4 text-5xl leading-[1.05] md:text-7xl">
-            Find the place <em className="text-primary">you'll call home.</em>
-          </h1>
+    <div className="hero-page">
+      <section className="relative min-h-[92vh] overflow-hidden rounded-b-[2rem]">
+        <img src={hero} alt="Modern home at dusk" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
+        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-end px-6 pb-10 pt-32">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Real estate studio</p>
+          <h1 className="mt-4 text-6xl leading-[0.95] md:text-8xl">Homes that<br />speak.</h1>
+          <div className="mt-6 h-px w-16 bg-foreground/50" />
+          <p className="mt-6 max-w-sm text-muted-foreground">Villas, apartments and houses shaped by light, form and purpose — reach owners directly.</p>
+          <a href="#listings" className="mt-8 inline-flex w-fit items-center gap-3 rounded-full border border-foreground/40 px-6 py-3 text-xs uppercase tracking-[0.2em] hover:bg-foreground hover:text-background">Explore homes <ArrowRight className="h-4 w-4" /></a>
+          <div className="mt-14 grid gap-3 md:grid-cols-4">
+            {[
+              [Compass, "Curated listings", "Every home reviewed before it goes live."],
+              [KeyRound, "Buy or rent", "Sale and rental homes in one place."],
+              [ShieldCheck, "Direct owners", "Contact owners with no middlemen."],
+              [Heart, "Save favorites", "Shortlist homes and come back anytime."],
+            ].map(([Icon, t, d]: any) => (
+              <div key={t} className="glass flex gap-4 rounded-2xl p-4">
+                <Icon className="h-6 w-6 shrink-0 text-primary" strokeWidth={1.4} />
+                <div><p className="text-sm font-semibold">{t}</p><p className="mt-1 text-xs text-muted-foreground">{d}</p></div>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="max-w-md text-muted-foreground">
-          Hand-picked villas, apartments and houses across India. Filter by what matters, save favorites, and reach owners directly.
-        </p>
       </section>
 
-      <section className="grid gap-3 rounded-md border border-border bg-card p-4 md:grid-cols-6">
+    <main id="listings" className="mx-auto max-w-7xl scroll-mt-6 px-6">
+      <div className="flex items-center gap-6 pb-6 pt-20 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        <span>Selected homes</span><span className="h-px flex-1 bg-border" />
+      </div>
+      <h2 className="mb-8 text-5xl md:text-6xl">Find your place</h2>
+      <section className="grid gap-3 rounded-2xl border border-border bg-card p-4 md:grid-cols-6">
         <input className={`${field} md:col-span-2`} placeholder="Search title, city, area…" value={q} onChange={(e) => setQ(e.target.value)} />
         <select className={field} value={listing} onChange={(e) => setListing(e.target.value)}>
           <option value="all">Buy or rent</option>
@@ -105,5 +125,21 @@ function Index() {
         </div>
       )}
     </main>
+      <section className="mx-auto mt-24 max-w-7xl px-6">
+        <div className="relative overflow-hidden rounded-[2rem]">
+          <img src={hero} alt="" loading="lazy" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover object-right" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
+          <div className="relative grid gap-4 p-10 md:grid-cols-4 md:p-16">
+            <div className="md:col-span-4">
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Ready to move?</p>
+              <h2 className="mt-3 text-5xl leading-[0.95] md:text-7xl">Let's find<br />something timeless.</h2>
+            </div>
+            {[["6+", "Homes listed"], ["3", "Cities"], ["0%", "Broker fees"], ["24h", "Owner reply time"]].map(([n, l]) => (
+              <div key={l} className="glass rounded-2xl p-5"><p className="font-display text-4xl font-light">{n}</p><p className="mt-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">{l}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

@@ -74,7 +74,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Antonio:wght@200;300;400&family=Manrope:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
@@ -109,21 +109,21 @@ function Header() {
     navigate({ to: "/auth", replace: true });
   };
   return (
-    <header className="border-b border-border">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <Link to="/" className="font-display text-2xl font-semibold">
-          Hearth <span className="text-primary">&</span> Key
+    <header className="absolute inset-x-0 top-0 z-30">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
+        <Link to="/" className="font-display text-2xl font-light uppercase tracking-[0.2em]">
+          Hearth<span className="text-primary">&</span>Key
         </Link>
-        <nav className="flex items-center gap-6 text-sm font-medium">
+        <nav className="glass flex items-center gap-6 rounded-full px-5 py-2 text-xs font-medium uppercase tracking-[0.15em]">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-primary" }}>Listings</Link>
           {user && <Link to="/favorites" activeProps={{ className: "text-primary" }}>Favorites</Link>}
           {isAdmin && <Link to="/admin" activeProps={{ className: "text-primary" }}>Admin</Link>}
           {user ? (
-            <button onClick={signOut} className="rounded-md border border-foreground px-4 py-2 hover:bg-foreground hover:text-background">
+            <button onClick={signOut} className="rounded-full border border-foreground/40 px-4 py-1.5 hover:bg-foreground hover:text-background">
               Sign out
             </button>
           ) : (
-            <Link to="/auth" className="rounded-md bg-ink px-4 py-2 text-ink-foreground">Sign in</Link>
+            <Link to="/auth" className="rounded-full bg-ink px-4 py-1.5 text-ink-foreground">Sign in</Link>
           )}
         </nav>
       </div>
@@ -146,9 +146,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Header />
-      <Outlet />
-      <footer className="mt-24 border-t border-border py-10 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Hearth & Key
+      <div className="pt-24 [&:has(>.hero-page)]:pt-0"><Outlet /></div>
+      <footer className="mt-24 border-t border-border">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-10 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+          <span>© {new Date().getFullYear()} Hearth & Key · All rights reserved</span>
+          <span>Instagram · LinkedIn · Pinterest</span>
+          <span>hello@hearthandkey.in</span>
+        </div>
       </footer>
       <Toaster />
     </QueryClientProvider>
