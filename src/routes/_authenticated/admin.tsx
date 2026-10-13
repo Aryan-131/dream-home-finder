@@ -72,12 +72,12 @@ function AdminPage() {
     const res = form.id
       ? await supabase.from("properties").update(row).eq("id", form.id).select("id").single()
       : await supabase.from("properties").insert(row).select("id").single();
-    if (res.error) { setSaving(false); return toast.error(res.error.message); }
+    if (res.error) { setSaving(false); toast.error(res.error.message); return; }
     const { error } = await supabase.from("property_contacts").upsert({
       property_id: res.data.id, owner_name: form.owner_name, owner_phone: form.owner_phone, owner_email: form.owner_email,
     });
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(form.id ? "Listing updated" : "Listing created");
     setForm(null);
     qc.invalidateQueries();
@@ -86,7 +86,7 @@ function AdminPage() {
   const remove = async (id: string) => {
     if (!confirm("Delete this listing?")) return;
     const { error } = await supabase.from("properties").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Listing deleted");
     qc.invalidateQueries();
   };
